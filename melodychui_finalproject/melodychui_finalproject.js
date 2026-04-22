@@ -45,8 +45,11 @@ function detection() {
     }
 }
 
-//elements to add: color, shapes, spikes, stems, vines, leaves, background color?, music?
+//elements to add: color, num of petals, shapes, spikes, stems, vines, leaves, background color?, music?
+//things to consider: shrinking size 
 
 //NOTE TO SELF: CAN REFERENCE PREVIOUS SKETCH PETAL DESIGN
 //in the end maybe have a wiggling/shaking/flowing design when pressed or hover 
 //in the end to restart, have the wind blow all the flowers away?
+
+//should i change to type generate so things can generate in sequence?
