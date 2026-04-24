@@ -31,22 +31,38 @@ function detection() {
         noStroke();
         fill(139, 128, 0);
         ellipse(windowWidth/2, windowHeight/2, 50) //starting flower center
-    } else if(input=="petals" || input=="pedals"){ //often time misoverheard
+    } else if(input.includes("petals") || input.includes("pedals")){ //oftentime misoverheard
         noFill();
-        stroke(0); //black
-        strokeWeight(5);
-        ellipse(windowWidth/2, windowHeight/2 - 40, 30, 50); //top petal
-        ellipse(windowWidth/2, windowHeight/2 + 40, 30, 50); //bottom petal
-        ellipse(windowWidth/2 - 40, windowHeight/2, 50, 30); //left petal
-        ellipse(windowWidth/2 + 40, windowHeight/2, 50, 30); //right petal
-    } else if(input=="red"){
+        stroke(0);
+        strokeWeight(3);
+        
+        let num = 0;
+        let numWords = {"one":1, "two":2, "three":3, "four":4, "five":5, "six":6, "seven":7, "eight":8, "nine":9}; 
+        //had to do this manually since using parseInt to convert speech to numbers was not efficient
+
+        for(let word in numWords){ //apparently needs seperate code for numbers above 10 as they no longer detect as words
+            if(input.includes(word)) num = numWords[word]; //if the words detected as numbers, it translates automatically
+        }        
+        if(num == 0) { //catches any of the numbers that are not words, so that it does not become 0 and if it doesn't detect then it's counted as 0
+            num = parseInt(input) || 0;
+        }
+
+        for(let i = 0; i < num; i++){ //draws out amount of petals
+            let angle = (TWO_PI/num)*i; //spreads out evenly full circle depending on the amount 
+            let x = windowWidth/2 + cos(angle)*40; //the *40 is the amount of pixels from the center
+            let y = windowHeight/2 + sin(angle)*40;
+            ellipse(x, y, 30, 30);
+        }
+    }
+    
+    /* else if(input=="red"){
         noStroke();
         fill(255, 22, 12);
         ellipse(windowWidth/2, windowHeight/2 - 40, 30, 50); //top petal
         ellipse(windowWidth/2, windowHeight/2 + 40, 30, 50); //bottom petal
         ellipse(windowWidth/2 - 40, windowHeight/2, 50, 30); //left petal
         ellipse(windowWidth/2 + 40, windowHeight/2, 50, 30); //right petal
-    }
+    } */
 }
 
 //elements to add: color, num of petals, shapes, spikes, stems, vines, leaves, background color?, music?
