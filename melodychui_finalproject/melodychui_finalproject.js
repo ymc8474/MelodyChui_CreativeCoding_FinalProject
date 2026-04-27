@@ -16,7 +16,10 @@ recording.start(true,true); //starts listening
 
 let flowerSize = 40; //to allow the flower to grow bigger or smaller (default is 40px from semester as that is the radius)
 let stemSize = 5; //adjust the thickness of stem (default 5px)
+<<<<<<< HEAD
 let bgCol; //adjusts the background color
+=======
+>>>>>>> 05ec70bd1238a49ea6712e38a7b9e4ae33d8c79a
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -98,6 +101,7 @@ function detection() {
         stemSize += 2; //makes the stem 2px thicker
     } else if(input=="thinner") {
         stemSize -= 2; //makes the stem 2px thinner
+<<<<<<< HEAD
     } else if(input=="background") {
         background(0, 0, random(0, 255)); //random shade of sky background
     } else if(input=="finish" || input=="finished" || input=="end") {
@@ -118,6 +122,12 @@ function mouseReleased() { //built-in functions to move the flower after it is c
 }
 
 //elements to add: spikes, vines, leaves, background designs, music?
+=======
+    }
+}
+
+//elements to add: spikes, vines, leaves, background color?, music?
+>>>>>>> 05ec70bd1238a49ea6712e38a7b9e4ae33d8c79a
 
 //NOTE TO SELF: CAN REFERENCE PREVIOUS SKETCH PETAL DESIGN
 //in the end maybe have a wiggling/shaking/flowing design when pressed or hover 
@@ -135,6 +145,7 @@ function mouseReleased() { //built-in functions to move the flower after it is c
         
         let num = 0;
         let numWords = {"one":1, "two":2, "three":3, "four":4, "five":5, "six":6, "seven":7, "eight":8, "nine":9}; 
+<<<<<<< HEAD
 
         for(let word in numWords){ 
             if(input.includes(word)) num = numWords[word]; 
@@ -147,6 +158,22 @@ function mouseReleased() { //built-in functions to move the flower after it is c
             let x = windowWidth/2 + cos(angle)*size;
             let y = windowHeight/2 + sin(angle)*size;
             ellipse(x, y); //
+=======
+        //had to do this manually since using parseInt to convert speech to numbers was not efficient
+
+        for(let word in numWords){ //apparently needs seperate code for numbers above 10 as they no longer detect as words
+            if(input.includes(word)) num = numWords[word]; //if the words detected as numbers, it translates automatically
+        }        
+        if(num == 0) { //catches any of the numbers that are not words, so that it does not become 0 and if it doesn't detect then it's counted as 0
+            num = parseInt(input) || 0;
+        }
+
+        for(let i = 0; i < num; i++){ //draws out amount of petals
+            let angle = (TWO_PI/num)*i; //spreads out evenly full circle depending on the amount 
+            let x = windowWidth/2 + cos(angle)*size; //the *40 is the amount of pixels from the center
+            let y = windowHeight/2 + sin(angle)*size;
+            ellipse(x, y);
+>>>>>>> 05ec70bd1238a49ea6712e38a7b9e4ae33d8c79a
         }
 
 */ 
