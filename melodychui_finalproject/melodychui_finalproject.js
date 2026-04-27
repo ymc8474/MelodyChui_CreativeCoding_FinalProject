@@ -20,7 +20,7 @@ function setup() {
 }
 
 function draw() {
-    
+
 }
 
 function detection() {
@@ -31,7 +31,7 @@ function detection() {
         noStroke();
         fill(139, 128, 0);
         ellipse(windowWidth/2, windowHeight/2, 50) //starting flower center
-    } else if(input.includes("petals") || input.includes("pedals")){ //oftentime misoverheard
+    } else if(input.includes("petals") || input.includes("pedals")){ //oftentime misoverheard so alternative detection
         noFill();
         stroke(0);
         strokeWeight(3);
