@@ -16,15 +16,23 @@ recording.start(true,true); //starts listening
 
 let flowerSize = 40; //to allow the flower to grow bigger or smaller (default is 40px from semester as that is the radius)
 let stemSize = 5; //adjust the thickness of stem (default 5px)
-let bgCol = [0, 0, 0]; //adjusts the background color
+let bgCol= [255, 255, 255]; //default white backround, and this variables allows adjustments for the background color
 let flowerNum = 0; //saves the number of flower petals and adjusts to change the color for each when updating
 let flowerCol = [0, 0, 0]; //easier format to update the flower colors as it reprints the flower design each time
 let showStem = false; // turns off the stem when not being called
 let showCenter = false; //similar function as showStem but for the flower center
+let xPos; //locates current x position of flower center
+let yPos; //locates current y position of flower center
+let movement = false; //tracks whether the flower is currently moving/being dragged
+let centerSize = 40; //determines the distance from center, for detecting where the mouse can control movement
+let stemHeight = 1000; //the length of the stem (stretching beyond the borders so when you move left or right it still stays attached to the bottom)
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  background(255); //white (not in draw loop so it does not cover the drawing on each new added frame)
+    createCanvas(windowWidth, windowHeight);
+    background(255); //white (not in draw loop so it does not cover the drawing on each new added frame)
+
+    xPos = windowWidth/2;  
+    yPos = windowHeight/2;   
 }
 
 function draw() {
@@ -105,7 +113,7 @@ function detection() {
     
     // --- BACKRGROUND SECTION ---
     else if(input=="background") {
-        bgColor = [0, 0, random(0, 255)];
+        bgCol = [0, 0, random(0, 255)];
         flowerUpdate(); //random shade of sky background
     } 
     
@@ -117,7 +125,7 @@ function detection() {
 
 function flowerUpdate() { //in order to properly change colors and sizes of things, this is needed to reupdate/draw the image at that moment
 //I don't know why but this whole section took a long to figure out because I didn't want to keep "rewashing" the screen with the same image but iterated, but after testing so so so many methods, this is the only one that actually seems to work
-    background(bgColor[0], bgColor[1], bgColor[2]); //changes to the currently saved background, while wiping away the screen and redrawing the new design on top
+    background(bgCol[0], bgCol[1], bgCol[2]); //changes to the currently saved background, while wiping away the screen and redrawing the new design on top
 
     // --- DEFAULT FLOWER CENTER ---
     //redraws this section after the whole screen is "replaced/updated"
@@ -154,21 +162,21 @@ function stemUpdate() { //this is the alternative tested way to make a stem that
 
 function flowerUpdate() { //in order to properly change colors and sizes of things, this is needed to reupdate/draw the image at that moment
 //I don't know why but this whole section took a long to figure out because I didn't want to keep "rewashing" the screen with the same image but iterated, but after testing so so so many methods, this is the only one that actually seems to work
-    background(bgColor[0], bgColor[1], bgColor[2]); //changes to the currently saved background, while wiping away the screen and redrawing the new design on top
+    background(bgCol[0], bgCol[1], bgCol[2]); //changes to the currently saved background, while wiping away the screen and redrawing the new design on top
 
     // --- DEFAULT FLOWER CENTER ---
     //redraws this section after the whole screen is "replaced/updated"
     if(centerVisible == true) { //simliar to how showStem works
         noStroke();
         fill(139, 128, 0); //yellow
-        ellipse(windowWidth/2, windowHeight/2, flowerSize); //the center can grow with the flowers
+        ellipse(xPos, yPos, flowerSize); //the center can grow with the flowers
     }
    
     // --- DEFAULT STEM ---
     if(showStem == true) { //this is used so that the stem is not shown before stem is called
         stroke(79, 121, 66); //green
         strokeWeight(stemSize);
-        line(windowWidth/2, windowHeight, windowWidth/2, windowHeight/2 + flowerSize/2 + 10); //ading the +flowerSize/2 + 10 make it so that the stem is not covering the petals and center and is a little bit detached so that when it grows it does not show on the center
+        line(xPos, yPos + centerSize/2 + 10, xPos, yPos + centerSize/2 + stemHeight + 10); 
     }
 
     // --- FLOWER PETAL ADJUSTMENTS ---
@@ -177,8 +185,8 @@ function flowerUpdate() { //in order to properly change colors and sizes of thin
     fill(flowerCol[0], flowerCol[1], flowerCol[2]); //updates the constant color values 
     for (let i=0; i<flowerNum; i++) { //for every petal, it loops to adjust the color, shape, and size
         let angle = (TWO_PI/flowerNum)*i;
-        let x = windowWidth/2 + cos(angle) * flowerSize;
-        let y = windowHeight/2 + sin(angle) * flowerSize;
+        let x = xPos + cos(angle) * flowerSize;
+        let y = yPos + sin(angle) * flowerSize;
         ellipse(x, y, flowerSize, flowerSize); //changed to be not hardcoded values or else the petals won't grow/shrink
     }
 }
@@ -190,16 +198,28 @@ function stemUpdate() { //this is the alternative tested way to make a stem that
 }
 
 function mousePressed() {
-
+    if(dist(mouseX, mouseY, xPos, yPos) < centerSize/2) { //checks the distance around the radius of the center of the flower, if it is nearby enough, allow movement with the mouse
+        movement = true;
+    }
 }
 
-function mouseDragged() { //built-in functions to move the flower after it is completed
-
+function mouseDragged() { //built-in functions to drag/move the flower
+    if(movement == true) { //if movement is activated (mouse is being pressed)
+        xPos = mouseX; //keep updating the current center position to x position of mouse location
+        yPos = mouseY; //keep updating the current center position to x position of mouse location
+        flowerUpdate(); //keeps updating the screen to track the movement of the flower
+    }
 }
 
 function mouseReleased() { //built-in functions to move the flower after it is completed
-
+    movement = false; //stops all movement
 }
+
+
+
+
+
+
 
 //elements to add: spikes, vines, leaves, background color?, music?
 
@@ -234,5 +254,3 @@ function mouseReleased() { //built-in functions to move the flower after it is c
         }
 
 */ 
-
-//testing
