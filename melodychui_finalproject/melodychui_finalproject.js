@@ -152,6 +152,43 @@ function stemUpdate() { //this is the alternative tested way to make a stem that
     line(windowWidth/2, windowHeight, windowWidth/2, windowHeight/2); //draws the stem from the middle bottom of the screen to the center of the flower
 }
 
+function flowerUpdate() { //in order to properly change colors and sizes of things, this is needed to reupdate/draw the image at that moment
+//I don't know why but this whole section took a long to figure out because I didn't want to keep "rewashing" the screen with the same image but iterated, but after testing so so so many methods, this is the only one that actually seems to work
+    background(bgColor[0], bgColor[1], bgColor[2]); //changes to the currently saved background, while wiping away the screen and redrawing the new design on top
+
+    // --- DEFAULT FLOWER CENTER ---
+    //redraws this section after the whole screen is "replaced/updated"
+    if(centerVisible == true) { //simliar to how showStem works
+        noStroke();
+        fill(139, 128, 0); //yellow
+        ellipse(windowWidth/2, windowHeight/2, flowerSize); //the center can grow with the flowers
+    }
+   
+    // --- DEFAULT STEM ---
+    if(showStem == true) { //this is used so that the stem is not shown before stem is called
+        stroke(79, 121, 66); //green
+        strokeWeight(stemSize);
+        line(windowWidth/2, windowHeight, windowWidth/2, windowHeight/2 + flowerSize/2 + 10); //ading the +flowerSize/2 + 10 make it so that the stem is not covering the petals and center and is a little bit detached so that when it grows it does not show on the center
+    }
+
+    // --- FLOWER PETAL ADJUSTMENTS ---
+    // this works by constantly reupdating/drawing the new screens
+    noStroke();    
+    fill(flowerCol[0], flowerCol[1], flowerCol[2]); //updates the constant color values 
+    for (let i=0; i<flowerNum; i++) { //for every petal, it loops to adjust the color, shape, and size
+        let angle = (TWO_PI/flowerNum)*i;
+        let x = windowWidth/2 + cos(angle) * flowerSize;
+        let y = windowHeight/2 + sin(angle) * flowerSize;
+        ellipse(x, y, flowerSize, flowerSize); //changed to be not hardcoded values or else the petals won't grow/shrink
+    }
+}
+
+function stemUpdate() { //this is the alternative tested way to make a stem that can grow and shrink properly
+    stroke(79, 121, 66); //green
+    strokeWeight(stemSize);
+    line(windowWidth/2, windowHeight, windowWidth/2, windowHeight/2); //draws the stem from the middle bottom of the screen to the center of the flower
+}
+
 function mousePressed() {
 
 }
@@ -164,7 +201,7 @@ function mouseReleased() { //built-in functions to move the flower after it is c
 
 }
 
-//elements to add: spikes, vines, leaves, background designs, music?
+//elements to add: spikes, vines, leaves, background color?, music?
 
 //NOTE TO SELF: CAN REFERENCE PREVIOUS SKETCH PETAL DESIGN
 //in the end maybe have a wiggling/shaking/flowing design when pressed or hover 
@@ -182,6 +219,7 @@ function mouseReleased() { //built-in functions to move the flower after it is c
         
         let num = 0;
         let numWords = {"one":1, "two":2, "three":3, "four":4, "five":5, "six":6, "seven":7, "eight":8, "nine":9}; 
+<<<<<<< HEAD
 
         for(let word in numWords){ 
             if(input.includes(word)) num = numWords[word]; 
@@ -194,6 +232,22 @@ function mouseReleased() { //built-in functions to move the flower after it is c
             let x = windowWidth/2 + cos(angle)*size;
             let y = windowHeight/2 + sin(angle)*size;
             ellipse(x, y); //
+=======
+        //had to do this manually since using parseInt to convert speech to numbers was not efficient
+
+        for(let word in numWords){ //apparently needs seperate code for numbers above 10 as they no longer detect as words
+            if(input.includes(word)) num = numWords[word]; //if the words detected as numbers, it translates automatically
+        }        
+        if(num == 0) { //catches any of the numbers that are not words, so that it does not become 0 and if it doesn't detect then it's counted as 0
+            num = parseInt(input) || 0;
+        }
+
+        for(let i = 0; i < num; i++){ //draws out amount of petals
+            let angle = (TWO_PI/num)*i; //spreads out evenly full circle depending on the amount 
+            let x = windowWidth/2 + cos(angle)*size; //the *40 is the amount of pixels from the center
+            let y = windowHeight/2 + sin(angle)*size;
+            ellipse(x, y);
+>>>>>>> 05ec70bd1238a49ea6712e38a7b9e4ae33d8c79a
         }
 
 */ 
