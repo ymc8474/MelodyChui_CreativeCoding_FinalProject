@@ -11,27 +11,52 @@
 //In order to make it work on Open Processing, I think the sound library needs to be added to the index
 
 // MAJOR UPDATE: I AM REWRITING WHAT I HAD FROM THE FINAL PRESENTATION, BUT TAKING CERTAIN ELEMENTS AND ADDING THEM BACK IN, BUT AFTER EXPERIMENTING FOR A WHILE WITH A LOT OF FRUSTRATION, STARTING OVER FROM A BASIC TEMPLATE SHOULD WORK THE BEST TO IMPLEMENT MY NEW IDEAS/CONCEPTS AFTER RECIEVING NOTES FROM THE FEEDBACK SESSION
+//The need code is mixed with the old code so some of the overlap may make certain comments strange (potentially)
 
 let recording = new p5.SpeechRec(); //creates a new speech recognition object
 recording.onResult = detection; //whenever sound is detected, the words are trying to be identified
 recording.start(true,true); //starts listening
 
 let showStem = false; //default does not show any stems on screen
+let showCenter = false; //similar function as showStem but for the custom flower center
 let bgCol = [255, 255, 255]; //default white backround, and this variables allows adjustments for the background color
 let flowerSize = 1; //to allow the flower to grow bigger or smaller (default is 1 which is 100% and can be adjusted from there)
 let stemSize = 1; //same concept of flowerSize but for stem
+let xPos; //locates current x position of flower center
+let yPos; //locates current y position of flower center
+let customFlower = false; //shows that a stem has not been chosen for the custom flower yet
+let flowerNum = 0; //saves the number of flower petals and adjusts to change the color for each when updating
+let flowerCol = [0, 0, 0]; //easier format to update the flower colors as it reprints the flower design each time
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
     background(255); //white (not in draw loop so it does not cover the drawing on each new added frame)
     generateStems(); //this needs to be here or else it won't work but essentially premakes the stems
+
+    xPos = windowWidth/2; //finds the center to start the custom flower
+    yPos = windowHeight/2; 
 }
 
 function draw() {
     background(bgCol[0], bgCol[1], bgCol[2]); //changes to the currently saved background, while wiping away the screen and redrawing the new design on top
+    
     if (showStem == true) { //if stems are being called, show them
         createStems();
         createFlowers(); //continutes to update flowers as well so they don't dissapear after every update
+    }
+
+    if (showCenter == true && customFlower != false) { //only draws if start has been stated and a stem has been chosen
+        noStroke();
+        fill(139, 128, 0); //yellow 
+        ellipse(customFlower.x, customFlower.y - customFlower.h, 40); //the center can grow with the flowers
+
+        fill(flowerCol[0], flowerCol[1], flowerCol[2]); //updates the constant color values 
+        for (let i=0; i<flowerNum; i++) { //for every petal, it loops to adjust the color, shape, and size
+            let angle = (TWO_PI/flowerNum)*i;
+            let x = customFlower.x + cos(angle) * 40;
+            let y = (customFlower.y - customFlower.h) + sin(angle) * 40;
+            ellipse(x, y, 30 * flowerSize, 30 * flowerSize); //changed to be not hardcoded values or else the petals won't grow/shrink
+        }
     }
 }
 
@@ -42,7 +67,10 @@ function detection() {
     //sometimes with the floor() it seems to overwrite some existing flowers
     if (input == "stem" || input == "stems") {
         showStem = true; //activates the visibility of the stems when called
-    } else if (input == "lily") {
+    } 
+    
+    //pre-set flower sections
+    else if (input == "lily") {
         let i = floor(random(stems.length)); //chooses a random stem to place the flower on
         stems[i].flower = "lily"; //saves the flower into the array, showing that the certain stem is taken as it already has a flower on it
     } else if (input == "sunflower") { //same thing as lily but for sunflower
@@ -54,9 +82,15 @@ function detection() {
     } else if (input == "lavender") { //repeat for lavendar
         let i = floor(random(stems.length));
         stems[i].flower = "lavender";
-    } else if(input=="background") {
+    } 
+    
+    //background
+    else if(input=="background") {
         bgCol = [0, 0, random(0, 255)]; //random shade of blue for the sky
-    }  else if(input=="bigger" || input=="grow") { //makes the flower increase in size
+    }  
+    
+    //growth/shrink of flowers
+    else if(input=="bigger" || input=="grow") { //makes the flower increase in size
         flowerSize += 0.2 //adds 20% in size
     } else if(input=="smaller" || input=="shrink") { //makes the flowers decrease in size
         flowerSize -= 0.2 //decreases 20% in size
@@ -65,6 +99,38 @@ function detection() {
     } else if(input=="thinner") { //makes stem thinner
         stemSize -= 2; //makes the stem 2px thinner
     } 
+
+    //custom flower part
+    else if (input == "custom" || input == "start") {
+        customFlower = stems[floor(random(stems.length))]; //chooses a random flower to build on
+        showCenter = true; //shows the center dot of the flower
+    } else if(input.includes("petals") || input.includes("pedals")){ //petal development part; oftentime misoverheard so alternative detection
+    //default: round/circlular petal design
+        let num = 0;
+        let numWords = {"one":1, "two":2, "three":3, "four":4, "five":5, "six":6, "seven":7, "eight":8, "nine":9}; 
+        //had to do this manually since using parseInt to convert speech to numbers was not efficient
+
+        for(let word in numWords){ //apparently needs seperate code for numbers above 10 as they no longer detect as words
+            if(input.includes(word)) num = numWords[word]; //if the words detected as numbers, it translates automatically
+        }        
+        if(num == 0) { //catches any of the numbers that are not words, so that it does not become 0 and if it doesn't detect then it's counted as 0
+            num = parseInt(input) || 0;
+        }
+        flowerNum = num; //saves the amount of petals before the array counting is rewritten
+    }
+
+    //custom flower colors
+    else if (input == "red") {
+        flowerCol = [255, 22, 12];
+    } else if (input == "blue") {
+        flowerCol = [0, 71, 171];
+    } else if (input == "purple") {
+        flowerCol = [112, 41, 99];
+    } else if (input == "orange") {
+        flowerCol = [255, 140, 0];
+    } else if (input == "pink") {
+        flowerCol = [255, 105, 180];
+    }
 } 
 
 function generateStems() {
