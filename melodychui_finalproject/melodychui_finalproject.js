@@ -12,18 +12,58 @@
 
 // MAJOR UPDATE: I AM REWRITING WHAT I HAD FROM THE FINAL PRESENTATION, BUT TAKING CERTAIN ELEMENTS AND ADDING THEM BACK IN, BUT AFTER EXPERIMENTING FOR A WHILE WITH A LOT OF FRUSTRATION, STARTING OVER FROM A BASIC TEMPLATE SHOULD WORK THE BEST TO IMPLEMENT MY NEW IDEAS/CONCEPTS AFTER RECIEVING NOTES FROM THE FEEDBACK SESSION
 
-let recording = new p5.SpeechRec(); //
-recording.onResult = detection; 
+let recording = new p5.SpeechRec(); //creates a new speech recognition object
+recording.onResult = detection; //whenever sound is detected, the words are trying to be identified
 recording.start(true,true); //starts listening
+
+let showStem = false; //default does not show any stems on screen
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
     background(255); //white (not in draw loop so it does not cover the drawing on each new added frame)
+    generateStems(); //this needs to be here or else it won't work but essentially premakes the stems
+}
+
+function draw() {
+    background(255); //white; redraws/refreshes after every update
+    if (showStem == true) { //if stems are being called, show them
+        createStems();
+    }
 }
 
 function detection() {
-    let input=recording.resultString.toLowerCase();
+    let input=recording.resultString.toLowerCase(); //makes detection lowercase so when detecting the words case by case, it is the same
     console.log(input); //for personal reference to see whether it is detecting the right words
+
+    if (input == "stem" || input == "stems") {
+        showStem = true; //activates the visibility of the stems when called
+    }
+}
+
+function generateStems() {
+    stems = []; //holds the stem objects
+    let sectionWidth = width/10; //creates 10 random stems
+    for (let i=0; i<10; i++) { //loops 10 times to generate 10 different stems 
+        let x = sectionWidth*i + random(sectionWidth*0.2, sectionWidth*0.8); //makes sure they are within a certain distant apart from each other so the stems don't clash
+        let h = random(140, 260); //random height of the stems
+        let w = random(4, 6); //random thickness of the stems
+        let g = random(1, 255); //random green color
+        stems.push({ 
+            x: x, //the stems are laid out horizontally across the screen
+            y: height, //makes sure it starts from the bottom of the canvas
+            h: h,
+            w: w,
+            g: g
+        });
+    }
+}
+
+function createStems() {
+    for (let s of stems) { //generation of all the stems
+        stroke(0, s.g, 0);
+        strokeWeight(s.w);
+        line(s.x, s.y, s.x, s.y - s.h); //the s.y-s.h means that when drawing the line, they are moving upwards on the screen instead of downwards (which is offscreen)
+    }
 }
 
 /*
