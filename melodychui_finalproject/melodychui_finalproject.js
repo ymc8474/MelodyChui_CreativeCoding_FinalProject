@@ -41,7 +41,10 @@ function detection() {
     } else if (input == "lily") {
         let i = floor(random(stems.length)); //chooses a random stem to place the flower on
         stems[i].flower = "lily"; //saves the flower into the array, showing that the certain stem is taken as it already has a flower on it
-    }   
+    } else if (input == "sunflower") { //same thing as lily but for sunflower
+        let i = floor(random(stems.length));
+        stems[i].flower = "sunflower";
+    }
 }
 
 function generateStems() {
@@ -88,7 +91,27 @@ function createFlowers() {
         if (s.flower == "lily") { //if a lily is saved into the array, it appears
             createLily(s.x+10, s.y-s.h); //draws the lily at the top of the stem and makes sure its centered with the +10
         }
+        
+        if (s.flower == "sunflower") { //cannot be else if or else it can be overwritten by the lily
+            createSunflower(s.x, s.y - s.h); //same concept for lily but for sunflower
+        }
     }
+}
+
+function createSunflower(x, y) {
+    noStroke();
+    fill(235, 206, 4); //sunflower yellow
+    for (let i=0; i<14; i++) { //14 petals
+        let angle = (TWO_PI/14)*i; //the petals wrap around the center in a circle
+        push(); //starts the drawing position
+            translate(x, y); //makes sure the petals are being attached to the center
+            rotate(angle); //rotation from the previous petal
+            bezier(0, 0, 70, -25, 70, 25, 0, 0); //petal
+        pop(); //ends and saves the drawing position of the petal
+    }
+    noStroke();
+    fill(101, 67, 33); //brown center
+    ellipse(x, y, 25, 25); //center of sunflower
 }
 
 /*
