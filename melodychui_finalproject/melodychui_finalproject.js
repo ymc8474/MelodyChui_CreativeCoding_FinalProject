@@ -18,6 +18,7 @@ recording.start(true,true); //starts listening
 
 let showStem = false; //default does not show any stems on screen
 let bgCol = [255, 255, 255]; //default white backround, and this variables allows adjustments for the background color
+let flowerSize = 1; //to allow the flower to grow bigger or smaller (default is 1 which is 100% and can be adjusted from there)
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -55,6 +56,10 @@ function detection() {
     } else if(input=="background") {
         bgCol = [0, 0, random(0, 255)];
         flowerUpdate(); //random shade of sky background
+    }  else if(input=="bigger" || input=="grow") { //makes the flower increase in size
+        flowerSize += 0.2 //adds 20% in size
+    } else if(input=="smaller" || input=="shrink") { //makes the flowers decrease in size
+        flowerSize -= 0.2 //decreases 20% in size
     } 
 } 
 
@@ -101,17 +106,19 @@ function createFlowers() {
     }
 }
 
+//all flowers functions have the *flowerSize added to certain variables so that they can grow/shrink
+//additional note: somehow the pushes I made for the flowers didn't go through 
 function createLily(x, y) { //coordinates of the chosen stem's top x and y point position
     noStroke();
     fill(240, 240, 240); //light grey
-    arc(x-10, y, 52, 80, 0, PI); //underlying arch of the lily
+    arc(x-10, y, 52*flowerSize, 80*flowerSize, 0, PI); //underlying arch of the lily
     //note: the numbers above and below of the positioning were made tested trial and error
 
     fill(211, 211, 211); //semi-light grey
-    bezier(x-35, y, x+35, y-50, x+35, y+50, x-35, y); //top part of the lily
+    bezier(x-35*flowerSize, y, x+35*flowerSize, y-50*flowerSize, x+35*flowerSize, y+50*flowerSize, x-35*flowerSize, y); //top part of the lily
 
     fill(255, 240, 150); //light yellow
-    ellipse(x, y-15, 12, 25); //lily's center point                       
+    ellipse(x, y-15*flowerSize, 12*flowerSize, 25*flowerSize); //lily's center point                       
 }
 
 function createSunflower(x, y) {
@@ -122,34 +129,34 @@ function createSunflower(x, y) {
         push(); //starts the drawing position
             translate(x, y); //makes sure the petals are being attached to the center
             rotate(angle); //rotation from the previous petal
-            bezier(0, 0, 70, -25, 70, 25, 0, 0); //petal
+            bezier(0, 0, 70*flowerSize, -25*flowerSize, 70*flowerSize, 25*flowerSize, 0, 0); //petal
         pop(); //ends and saves the drawing position of the petal
     }
     noStroke();
     fill(101, 67, 33); //brown center
-    ellipse(x, y, 25, 25); //center of sunflower
+    ellipse(x, y, 25*flowerSize, 25*flowerSize); //center of sunflower
 }
 
 function createRose(x, y) {
     noStroke();
     fill(255, 20, 20); //red
-    arc(x, y, 70, 60, 0, PI); //bottom of the rose part
+    arc(x, y, 70*flowerSize, 60*flowerSize, 0, PI); //bottom of the rose part
 
     stroke(0); //black
     strokeWeight(1); //lines/rings
-    ellipse(x, y, 70, 35); //biggest ring
-    ellipse(x, y, 50, 25); //middle ring
-    ellipse(x, y, 30, 15); //smallest ring
+    ellipse(x, y, 70*flowerSize, 35*flowerSize); //biggest ring
+    ellipse(x, y, 50*flowerSize, 25*flowerSize); //middle ring
+    ellipse(x, y, 30*flowerSize, 15*flowerSize); //smallest ring
 }
 
 function createLavender(x, y) {
     noStroke();
     fill(150, 100, 200); //purple
-    ellipse(x, y, 30, 30); //bottom bulb
-    ellipse(x, y - 28, 30, 30);
-    ellipse(x, y - 56, 30, 30); //center bulb
-    ellipse(x, y - 84, 30, 30);
-    ellipse(x, y - 112, 30, 30); //top bulb
+    ellipse(x, y, 30*flowerSize, 30*flowerSize); //bottom bulb
+    ellipse(x, y-28*flowerSize, 30*flowerSize, 30*flowerSize);
+    ellipse(x, y-56*flowerSize, 30*flowerSize, 30*flowerSize); //center bulb
+    ellipse(x, y-84*flowerSize, 30*flowerSize, 30);
+    ellipse(x, y-112*flowerSize, 30, 30); //top bulb
 }
 
 /*
