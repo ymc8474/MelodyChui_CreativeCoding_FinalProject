@@ -19,6 +19,7 @@ recording.start(true,true); //starts listening
 let showStem = false; //default does not show any stems on screen
 let bgCol = [255, 255, 255]; //default white backround, and this variables allows adjustments for the background color
 let flowerSize = 1; //to allow the flower to grow bigger or smaller (default is 1 which is 100% and can be adjusted from there)
+let stemSize = 1; //same concept of flowerSize but for stem
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -54,12 +55,15 @@ function detection() {
         let i = floor(random(stems.length));
         stems[i].flower = "lavender";
     } else if(input=="background") {
-        bgCol = [0, 0, random(0, 255)];
-        flowerUpdate(); //random shade of sky background
+        bgCol = [0, 0, random(0, 255)]; //random shade of blue for the sky
     }  else if(input=="bigger" || input=="grow") { //makes the flower increase in size
         flowerSize += 0.2 //adds 20% in size
     } else if(input=="smaller" || input=="shrink") { //makes the flowers decrease in size
         flowerSize -= 0.2 //decreases 20% in size
+    } else if(input=="thicker") { //makes stem thicker
+        stemSize += 2; //makes the stem 2px thicker
+    } else if(input=="thinner") { //makes stem thinner
+        stemSize -= 2; //makes the stem 2px thinner
     } 
 } 
 
@@ -84,7 +88,7 @@ function generateStems() {
 function createStems() {
     for (let s of stems) { //generation of all the stems
         stroke(0, s.g, 0);
-        strokeWeight(s.w);
+        strokeWeight(s.w*stemSize); //mulitplied by stemSize to control thickness
         line(s.x, s.y, s.x, s.y - s.h); //the s.y-s.h means that when drawing the line, they are moving upwards on the screen instead of downwards (which is offscreen)
     }
 }
