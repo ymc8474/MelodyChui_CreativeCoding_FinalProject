@@ -17,6 +17,7 @@ recording.onResult = detection; //whenever sound is detected, the words are tryi
 recording.start(true,true); //starts listening
 
 let showStem = false; //default does not show any stems on screen
+let bgCol = [255, 255, 255]; //default white backround, and this variables allows adjustments for the background color
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -25,7 +26,7 @@ function setup() {
 }
 
 function draw() {
-    background(255); //white; redraws/refreshes after every update
+    background(bgCol[0], bgCol[1], bgCol[2]); //changes to the currently saved background, while wiping away the screen and redrawing the new design on top
     if (showStem == true) { //if stems are being called, show them
         createStems();
         createFlowers(); //continutes to update flowers as well so they don't dissapear after every update
@@ -51,8 +52,11 @@ function detection() {
     } else if (input == "lavender") { //repeat for lavendar
         let i = floor(random(stems.length));
         stems[i].flower = "lavender";
-    }
-}
+    } else if(input=="background") {
+        bgCol = [0, 0, random(0, 255)];
+        flowerUpdate(); //random shade of sky background
+    } 
+} 
 
 function generateStems() {
     stems = []; //holds the stem objects
@@ -152,7 +156,7 @@ function createLavender(x, y) {
 // --- OLD CODE (BEFORE FEEDBACK) ---
 let flowerSize = 40; //to allow the flower to grow bigger or smaller (default is 40px from semester as that is the radius)
 let stemSize = 5; //adjust the thickness of stem (default 5px)
-let bgCol= [255, 255, 255]; //default white backround, and this variables allows adjustments for the background color
+let bgCol = [255, 255, 255]; //default white backround, and this variables allows adjustments for the background color
 let flowerNum = 0; //saves the number of flower petals and adjusts to change the color for each when updating
 let flowerCol = [0, 0, 0]; //easier format to update the flower colors as it reprints the flower design each time
 let showStem = false; // turns off the stem when not being called
