@@ -10,10 +10,24 @@
 //14" MacbookPro Window Height: 982px
 //In order to make it work on Open Processing, I think the sound library needs to be added to the index
 
+// MAJOR UPDATE: I AM REWRITING WHAT I HAD FROM THE FINAL PRESENTATION, BUT TAKING CERTAIN ELEMENTS AND ADDING THEM BACK IN, BUT AFTER EXPERIMENTING FOR A WHILE WITH A LOT OF FRUSTRATION, STARTING OVER FROM A BASIC TEMPLATE SHOULD WORK THE BEST TO IMPLEMENT MY NEW IDEAS/CONCEPTS AFTER RECIEVING NOTES FROM THE FEEDBACK SESSION
+
 let recording = new p5.SpeechRec(); //
 recording.onResult = detection; 
 recording.start(true,true); //starts listening
 
+function setup() {
+    createCanvas(windowWidth, windowHeight);
+    background(255); //white (not in draw loop so it does not cover the drawing on each new added frame)
+}
+
+function detection() {
+    let input=recording.resultString.toLowerCase();
+    console.log(input); //for personal reference to see whether it is detecting the right words
+}
+
+/*
+// --- OLD CODE (BEFORE FEEDBACK) ---
 let flowerSize = 40; //to allow the flower to grow bigger or smaller (default is 40px from semester as that is the radius)
 let stemSize = 5; //adjust the thickness of stem (default 5px)
 let bgCol= [255, 255, 255]; //default white backround, and this variables allows adjustments for the background color
@@ -214,3 +228,4 @@ function mouseDragged() { //built-in functions to drag/move the flower
 function mouseReleased() { //built-in functions to move the flower after it is completed
     movement = false; //stops all movement
 }
+*/ 
