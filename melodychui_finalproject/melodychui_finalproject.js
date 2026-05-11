@@ -28,6 +28,7 @@ function draw() {
     background(255); //white; redraws/refreshes after every update
     if (showStem == true) { //if stems are being called, show them
         createStems();
+        createFlowers(); //continutes to update flowers as well so they don't dissapear after every update
     }
 }
 
@@ -37,7 +38,10 @@ function detection() {
 
     if (input == "stem" || input == "stems") {
         showStem = true; //activates the visibility of the stems when called
-    }
+    } else if (input == "lily") {
+        let i = floor(random(stems.length)); //chooses a random stem to place the flower on
+        stems[i].flower = "lily"; //saves the flower into the array, showing that the certain stem is taken as it already has a flower on it
+    }   
 }
 
 function generateStems() {
@@ -63,6 +67,27 @@ function createStems() {
         stroke(0, s.g, 0);
         strokeWeight(s.w);
         line(s.x, s.y, s.x, s.y - s.h); //the s.y-s.h means that when drawing the line, they are moving upwards on the screen instead of downwards (which is offscreen)
+    }
+}
+
+function createLily(x, y) { //coordinates of the chosen stem's top x and y point position
+    noStroke();
+    fill(240, 240, 240); //light grey
+    arc(x-10, y, 52, 80, 0, PI); //underlying arch of the lily
+    //note: the numbers above and below of the positioning were made tested trial and error
+
+    fill(211, 211, 211); //semi-light grey
+    bezier(x-35, y, x+35, y-50, x+35, y+50, x-35, y); //top part of the lily
+
+    fill(255, 240, 150); //light yellow
+    ellipse(x, y-15, 12, 25); //lily's center point                       
+}
+
+function createFlowers() {
+    for (let s of stems) {
+        if (s.flower == "lily") { //if a lily is saved into the array, it appears
+            createLily(s.x+10, s.y-s.h); //draws the lily at the top of the stem and makes sure its centered with the +10
+        }
     }
 }
 
