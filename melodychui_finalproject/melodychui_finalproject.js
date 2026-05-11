@@ -36,6 +36,7 @@ function detection() {
     let input=recording.resultString.toLowerCase(); //makes detection lowercase so when detecting the words case by case, it is the same
     console.log(input); //for personal reference to see whether it is detecting the right words
 
+    //sometimes with the floor() it seems to overwrite some existing flowers
     if (input == "stem" || input == "stems") {
         showStem = true; //activates the visibility of the stems when called
     } else if (input == "lily") {
@@ -44,6 +45,12 @@ function detection() {
     } else if (input == "sunflower") { //same thing as lily but for sunflower
         let i = floor(random(stems.length));
         stems[i].flower = "sunflower";
+    } else if (input == "rose") { //repeat for rose
+        let i = floor(random(stems.length));
+        stems[i].flower = "rose";
+    } else if (input == "lavender") { //repeat for lavendar
+        let i = floor(random(stems.length));
+        stems[i].flower = "lavender";
     }
 }
 
@@ -73,6 +80,23 @@ function createStems() {
     }
 }
 
+function createFlowers() {
+    for (let s of stems) {
+        if (s.flower == "lily") { //if a lily is saved into the array, it appears
+            createLily(s.x+10, s.y-s.h); //draws the lily at the top of the stem and makes sure its centered with the +10
+        }
+        if (s.flower == "sunflower") { //cannot be else if or else it can be overwritten by the lily
+            createSunflower(s.x, s.y - s.h); //same concept for lily but for sunflower
+        }
+        if (s.flower == "rose") { //repeat for rose
+            createRose(s.x, s.y - s.h);
+        }
+        if (s.flower == "lavender") { //repeat for lavendar
+            createLavender(s.x, s.y - s.h);
+        }
+    }
+}
+
 function createLily(x, y) { //coordinates of the chosen stem's top x and y point position
     noStroke();
     fill(240, 240, 240); //light grey
@@ -84,18 +108,6 @@ function createLily(x, y) { //coordinates of the chosen stem's top x and y point
 
     fill(255, 240, 150); //light yellow
     ellipse(x, y-15, 12, 25); //lily's center point                       
-}
-
-function createFlowers() {
-    for (let s of stems) {
-        if (s.flower == "lily") { //if a lily is saved into the array, it appears
-            createLily(s.x+10, s.y-s.h); //draws the lily at the top of the stem and makes sure its centered with the +10
-        }
-        
-        if (s.flower == "sunflower") { //cannot be else if or else it can be overwritten by the lily
-            createSunflower(s.x, s.y - s.h); //same concept for lily but for sunflower
-        }
-    }
 }
 
 function createSunflower(x, y) {
@@ -112,6 +124,28 @@ function createSunflower(x, y) {
     noStroke();
     fill(101, 67, 33); //brown center
     ellipse(x, y, 25, 25); //center of sunflower
+}
+
+function createRose(x, y) {
+    noStroke();
+    fill(255, 20, 20); //red
+    arc(x, y, 70, 60, 0, PI); //bottom of the rose part
+
+    stroke(0); //black
+    strokeWeight(1); //lines/rings
+    ellipse(x, y, 70, 35); //biggest ring
+    ellipse(x, y, 50, 25); //middle ring
+    ellipse(x, y, 30, 15); //smallest ring
+}
+
+function createLavender(x, y) {
+    noStroke();
+    fill(150, 100, 200); //purple
+    ellipse(x, y, 30, 30); //bottom bulb
+    ellipse(x, y - 28, 30, 30);
+    ellipse(x, y - 56, 30, 30); //center bulb
+    ellipse(x, y - 84, 30, 30);
+    ellipse(x, y - 112, 30, 30); //top bulb
 }
 
 /*
